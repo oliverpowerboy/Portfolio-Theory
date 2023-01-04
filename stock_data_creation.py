@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import os
+import numpy as np
 
 
 # get ticker data
@@ -40,7 +41,7 @@ def save_ticker_data(ticker_data, ticker, path="securities"):
     if not "cumulative_return" in ticker_data.columns:
         add_cumulative_returns(ticker_data)
 
-    data.to_csv(os.path.join(path, ticker + ".csv"))
+    ticker_data.to_csv(os.path.join(path, ticker + ".csv"))
 
 
 def load_csv(ticker, path="securities"):
@@ -62,11 +63,27 @@ def merge_columns(cols, *securities):
 
     return df
 
-def expected_return_on_security():
 
+def expected_return_on_security(stock):
 
-list_of_stocks = ("AAPL", "MSFT", "GOOG", "AMZN")
+    returns = np.log(stock["data"]["Close"] / stock["data"]["Close"].shift(1))
 
-data = [load_csv(stock) for stock in list_of_stocks]
+    # 252 trading days in a year
+    stock["expected_Return"] = returns.mean() * 252
 
-print(merge_columns("cumulative_return", data).std())
+    return stock
+
+# correlation of change in stock price between assets
+def correlation_table(portfolio):
+
+    data = merge_columns("Close",portfolio)
+    returns = np.log(data / data.shift(1))
+
+    return returns.cov()
+
+def std_dev_to_stock(stock):
+
+    returns = np.log(stock["data"]["Close"] / stock["data"]["Close"].shift(1))
+    stock["std_dev"] = returns.std()
+
+    return stock
