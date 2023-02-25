@@ -50,28 +50,25 @@ def load_csv(ticker, path="securities"):
             "data": pd.read_csv(filepath_or_buffer=path, index_col="Date")}
 
 
-def merge_columns(cols, *securities):
-
-    # this allows a tuple to be passed as an argument
-    if len(securities) == 1 and isinstance(securities, tuple):
-        securities = securities[0]
+def merge_columns(cols, securities):
 
     df = pd.DataFrame()
 
     for security in securities:
-        df[security["ticker"]] = security["data"][cols]
+        df[security.ticker] = security.data[cols]
 
     return df
 
 
-def expected_return_on_security(stock):
+def expected_return_on_security(data):
+    # Changed from stock dict to dataframe
 
-    returns = np.log(stock["data"]["Close"] / stock["data"]["Close"].shift(1))
+    returns = np.log(data["Close"] / data["Close"].shift(1))
 
     # 252 trading days in a year
-    stock["expected_Return"] = returns.mean() * 252
+    data["expected_Return"] = returns.mean() * 252
 
-    return stock
+    return data
 
 # correlation of change in stock price between assets
 def correlation_table(portfolio):
@@ -81,9 +78,25 @@ def correlation_table(portfolio):
 
     return returns.cov()
 
-def std_dev_to_stock(stock):
+def std_dev_to_stock(data):
 
-    returns = np.log(stock["data"]["Close"] / stock["data"]["Close"].shift(1))
-    stock["std_dev"] = returns.std()
+    # Changed from stock dict to dataframe
 
-    return stock
+    returns = np.log(data["Close"] / data["Close"].shift(1))
+    data["std_dev"] = returns.std()
+
+    return data
+
+class stock:
+    path = "securities"
+    def __init__(self, ticker, data=None) -> None:
+        self.ticker = ticker
+
+        if data is None:
+            self.data = pd.read_csv(os.path.join(stock.path, self.ticker + ".csv"))
+        else:
+            self.data = data
+
+        self.returns = expected_return_on_security(self.data)
+
+        self.standard_deviation = std_dev_to_stock(self.data)
