@@ -24,28 +24,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\securities\ATVI.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\securities\DAL.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\securities\GAW.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\securities\GME.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -59,21 +38,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\securities\HINT.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\securities\MSFT.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\securities\ONEW.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
