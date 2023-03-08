@@ -1,5 +1,5 @@
 import math
-
+import stock_data_creation as stock_creation
 import numpy as np
 import pandas as pd
 from plotly import express as px
@@ -86,35 +86,16 @@ def global_min_max_return(dataframe):
     return global_min_max_return
 
 
-# main here as an example of how to use functions
-def main():
-    # Example stocks
-    stock_a = {"ticker": "GOOG", "std_dev": 0.07, "expected_Return": 0.013}
-    stock_b = {"ticker": "IBM", "std_dev": 0.06, "expected_Return": 0.015}
-    stock_c = {"ticker": "APPL", "std_dev": 0.07, "expected_Return": 0.016}
-    stock_d = {"ticker": "MSFT", "std_dev": 0.05, "expected_Return": 0.013}
-    stock_e = {"ticker": "TSLA", "std_dev": 0.06, "expected_Return": 0.12}
-    stock_f = {"ticker": "LMAO", "std_dev": 0.075, "expected_Return": 0.074}
+class portfolio:
+    def __init__(self,securities,corrolation_table) -> None:
+        
+        for i in securities:
+            self.i.ticker = i
+        
+        if corrolation_table is None:
+            corrolation_table = stock_creation.correlation_table(securities)
 
-    stock_list = stock_a, stock_b, stock_c, stock_d, stock_e, stock_f
-
-    results = []
-    for i in range(100_000):
-        portfolio_weights = assign_random_weights(stock_list)
-        portfolio_calculated = calculate_portfolio(portfolio_weights)
-        results.append(portfolio_calculated)
-
-    dataframe = pd.DataFrame(results)
-
-    dataframe.to_csv("portfolio.csv", index_label="index")
-
-    dataframe["sharpe_Ratio"] = (dataframe["return"] - 0.04) / dataframe["risk"]
-    # dataframe = dataframe.loc[sharpe_Ratio_Filter]
-
-    print(global_min_max_return(dataframe))
-
-    px.scatter(dataframe, x="risk", y="return", hover_data=dataframe.columns).show()
-
-
-if __name__ == "__main__":
-    main()
+        weights = np.random.random(len(portfolio))
+        self.weights = weights / np.sum(weights)
+        self.risk = math.sqrt(portfolio_variance(portfolio, corrolation_table))
+        self.returns = np.dot(self.weights * self.securities)
